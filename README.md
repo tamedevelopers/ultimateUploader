@@ -406,14 +406,14 @@ Array
 ```
 
 ### Example Image
-![Sample Image With Watermark](https://github.com/tamedevelopers/ultimateUploader/blob/main/164471880099d95c853c830f6.jpeg)
+![Sample Image With Watermark](https://raw.githubusercontent.com/tamedevelopers/ultimateUploader/master/164471880099d95c853c830f6.jpeg)
 
 
 ### Example Image Original
 ```
 Image size of 2.2mb
 ```
-![Sample Original Image](https://github.com/tamedevelopers/ultimateUploader/blob/main/collins-lesulie-0VEDrQXxrQo-unsplash.jpg)
+![Sample Original Image](https://raw.githubusercontent.com/tamedevelopers/ultimateUploader/master/collins-lesulie-0VEDrQXxrQo-unsplash.jpg)
 
 
 ### Example Image Original - Compressed -v
@@ -421,7 +421,7 @@ Image size of 2.2mb
 Image compressed to 988kb
 Watermarked and retain its original quality
 ```
-![Sample Original Compressed Image With Watermark](https://github.com/tamedevelopers/ultimateUploader/blob/main/1644769592c599cf33805896d.jpg)
+![Sample Original Compressed Image With Watermark](https://raw.githubusercontent.com/tamedevelopers/ultimateUploader/master/1644769592c599cf33805896d.jpg)
 
 
 
