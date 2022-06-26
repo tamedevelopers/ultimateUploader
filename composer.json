@@ -1,0 +1,27 @@
+{
+    "name": "peterson/ultimate-uploader",
+    "description": "PHP Library for Uploading all file types",
+    "keywords": ["php-image-uploader", "image-uploader", "image", "uploader"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fredrick Peterson",
+            "email": "tamedevelopers@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "ultimateUploader\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}
