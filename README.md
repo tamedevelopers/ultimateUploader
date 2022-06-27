@@ -37,7 +37,7 @@ Prior to installing `ultimate-uploader` get the [Composer](https://getcomposer.o
 
 ```composer.json
 "require": {
-    "peterson/ultimate-uploader": "^2.0"
+    "peterson/ultimate-uploader": "^1.1"
 }
 ```
 
