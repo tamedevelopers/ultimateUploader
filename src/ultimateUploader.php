@@ -152,7 +152,7 @@ class ultimateUploader{
     
     
     /**
-    * Image upload run
+    * Image upload run 
     * @param filename           string - the html input file name (image).
     * @param folder_create      string - for creating folder (default, year, month, day)
     * @param upload_dir         string - for dir upload folder (image/new | images)
@@ -1005,7 +1005,7 @@ class ImgCompressor {
 				'image/png',
 				'image/gif',
                 'image/webp'
-			)
+			) 
 		);
 	}
 	
