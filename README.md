@@ -251,8 +251,8 @@ Dimension size error check on $upload->run();
 
 $upload->run(['width' => 500, 'height' => 700])
 
-['same' => false] => "Will only check if height or weight is greater or equal to allowed dimension"
-['same' => true] => "Will only check if height or weight is equal to allowed dimension"
+['same' => false] => "Will only check if height or weight is greater or equal to allowed dimension set"
+['same' => true] => "Will only check if height or weight is equal to allowed dimension set"
 
 ```
 
