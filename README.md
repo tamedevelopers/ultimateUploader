@@ -246,12 +246,13 @@ $upload->run('avatar', 'default', 'upload/avatar', 'images', '1.5mb', 1, ['heigh
 ```
 Dimension size error check on $upload->run();
 
-Takes an associative array --- ['width' => 500, 'height' => 700]
-
+->  Takes an associative array --- ['width' => 500, 'height' => 700, 'same' => false]
+->  By default same is set to `false` if not set.
 
 $upload->run(['width' => 500, 'height' => 700])
 
-When this is set, then it check is width or height of uploaded, if image is same as allowed dimension size
+['same' => false] => "Will only check if height or weight is greater or equal to allowed dimension"
+['same' => true] => "Will only check if height or weight is equal to allowed dimension"
 
 ```
 
@@ -346,22 +347,22 @@ $upload->run('avatar', 'year', 'upload/avatar', 'images', '1.5mb', 1);
 
 ### MIME TYPE
 ```
-'video' => ['video/mp4','video/mpeg','video/quicktime','video/x-msvideo','video/x-ms-wmv']
-'audio' => ['audio/mpeg','audio/x-wav'],
-'files' => ['application/msword','application/pdf','text/plain','application/zip', 'application/x-zip-compressed', 
-'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel',
-'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-'images' => ['image/jpeg', 'image/png'], //'image/webp'
-'general_file' => ['image/jpeg', 'image/png', 'application/pdf'],
-'general_media' => ['audio/mpeg','audio/x-wav', 'video/mp4','video/mpeg','video/quicktime','video/x-msvideo','video/x-ms-wmv'],
+'video'         =>  ['.mp4', '.mpeg', '.mov', '.avi', '.wmv'],
+'audio'         =>  ['.mp3', '.wav'],
+'files'         =>  ['.docx', '.pdf', '.txt'],
+'images'        =>  ['.jpg', '.jpeg', '.png'],
+'general_file'  =>  ['.docx', '.pdf', '.txt', '.zip', '.rar', '.xlsx', '.xls'],
+'general_image' =>  ['.jpg', '.jpeg', '.png', '.webp'],
+'general_media' =>  ['.mp3', '.wav', '.mp4', '.mpeg', '.mov', '.avi', '.wmv']
 
 Pass in any of this into the Type parameter section when calling the ->run Method
 ```
 - video
 - audio
 - files
-- images 
 - general_file
+- images 
+- general_image
 - general_media
 
 
