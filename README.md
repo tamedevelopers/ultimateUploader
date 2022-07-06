@@ -37,7 +37,7 @@ Prior to installing `ultimate-uploader` get the [Composer](https://getcomposer.o
 
 ```composer.json
 "require": {
-    "peterson/ultimate-uploader": "^1.1"
+    "peterson/ultimate-uploader": "^2.0"
 }
 ```
 
@@ -59,14 +59,10 @@ composer update
 
 ```
 require_once __DIR__ . '/vendor/autoload.php';
-
 $upload = new ultimateUploader\ultimateUploader();
-
 or
 require_once __DIR__ . '/vendor/autoload.php';
-
 use \ultimateUploader\ultimateUploader;
-
 $upload = new ultimateUploader();
 ```
 
@@ -74,7 +70,6 @@ $upload = new ultimateUploader();
 
 ```
 include_once "pat_to/ultimateUploader.php";
-
 $upload = new ultimateUploader\ultimateUploader();
 ```
 
@@ -82,7 +77,6 @@ $upload = new ultimateUploader\ultimateUploader();
 ```
 You can download and entire repo and copy the src file alone to directory of your project.
 - src/ultimateUploader.php
-
 ```
 
 ## Error Code
@@ -90,7 +84,6 @@ You can download and entire repo and copy the src file alone to directory of you
 |--------------------------------------------------------------------------
 | ALL Error Code
 | Some error can be skipped, depending on what you need
-
 -> ERROR_400 - no file upload 
 -> ERROR_401 - select file to upload
 -> ERROR_402 - File upload size is bigger than allowed size limit
@@ -115,9 +108,7 @@ echo $upload->allError;
 -> errorDisallowed -- index array [], all error code to ignore
 -> base_dir -- Path to base dir (NULL on default)
 -> base_url -- Path to base storage url (NULL on default)
-
 $upload = new ultimateUploader\ultimateUploader([400, 401], 'path_to_dir', 'localhost/path_to_storage/folder');
-
 - By default the error disallow array is empty
 - By default the base dir, get path to your document root base directory
 - By default the base url, get path to your base domain url/link
@@ -156,7 +147,6 @@ $upload->run('avatar', 'default', 'upload/avatar', 'images', '1.5mb', 1, ['heigh
     ->error(function($error){
         
 		//you now have access to all public methods & properties using the $error var
-
     })->success(function($success){
 		//you now have access to all public methods & properties using the $success var
     });
@@ -173,19 +163,13 @@ $upload->run('avatar', 'year', 'upload/avatar', 'images', '1.5mb', 1)
         //error message
         echo $response->data['message'];
     })->success(function($response){
-
 		On Successful uploads --- ERROR_200
-
         //run auto resize
         $response->imageAutoResize(200, 100, false);
-
         //run watermark
         $response->waterMark('watermark.png', '50', '100', false); //Add watermark automatically
-
         //run compression
         $response->compress(true); //will replace original to compressred -v
-
-
         //->data properties contains all uploaded info
         $response->data;
     });
@@ -198,7 +182,6 @@ $upload->run('avatar', 'year', 'upload/avatar', 'images', '1.5mb', 1)
     
     $upload->run('avatar', 'month', 'upload', 'images', '2.5mb', 2)
         ->error(function($response){
-
             //you can customize each error text message 
             if($response->data['status'] == 401){
                 echo "Custom message - Please select a file to upload";
@@ -208,10 +191,8 @@ $upload->run('avatar', 'year', 'upload/avatar', 'images', '1.5mb', 1)
             //error message
             echo $response->data['message'];
         })->success(function($response){
-
             //proccess further code blocks
 			$response->data;
-
         });
 ```
 
@@ -222,7 +203,6 @@ $upload->run('avatar', 'year', 'upload/avatar', 'images', '1.5mb', 1)
 	
 $upload->run('avatar', 'default', 'upload/avatar', 'images', '1.5mb', 1, ['height' => 500, 'width' => '300'])
     ->error(function($response){
-
 		//you can customize each error text message 
 		if($response->data['status'] == 401){
 			echo "Custom message - Please select a file to upload";
@@ -235,7 +215,6 @@ $upload->run('avatar', 'default', 'upload/avatar', 'images', '1.5mb', 1, ['heigh
 		//error message
 		echo $response->data['message'];
     })->success(function($response){
-
 		//proccess further code blocks
 		$response->data;
 		
@@ -245,38 +224,24 @@ $upload->run('avatar', 'default', 'upload/avatar', 'images', '1.5mb', 1, ['heigh
 ### DIMENSION PARAM SIZE
 ```
 Dimension size error check on $upload->run();
-
-->  Takes an associative array --- ['width' => 500, 'height' => 700, 'same' => false]
-->  By default same is set to `false` if not set.
-
+Takes an associative array --- ['width' => 500, 'height' => 700]
 $upload->run(['width' => 500, 'height' => 700])
-
-['same' => false] => "Will only check if height or weight is greater or equal to allowed dimension"
-['same' => true] => "Will only check if height or weight is equal to allowed dimension"
-
+When this is set, then it check is width or height of uploaded, if image is same as allowed dimension size
 ```
 
 ### Get Image Width And Height
 ```
 Must be called before the  ->run Method for this to work
 Useful for a single file upload like Cover Image or any other single upload
-
 --- Takes just one param (HTML input file name)
-
 //get file data
 $width = $upload->getImageAttribute('path_to_img_file);
-
-
 var_dump($width);
-
-
 --- returns an assoc array
-
 [
   ["height"]=> int(4209)
   ["width"]=> int(3368)
 ]
-
 ```
 
 
@@ -284,9 +249,7 @@ var_dump($width);
 ```
 By default Image Autoresize is set to -> false
 You need to set to -> true in other to enable the method
-
 -- Autoresize takes the lowest length value between Width & Height to crop/resize image
-
 $upload->imageAutoResize(200, 100, false);
 ```
 
@@ -295,13 +258,10 @@ $upload->imageAutoResize(200, 100, false);
 ```
 By default Watermark is set to -> false
 You need to set to -> true in other to enable the method
-
 -- Watermark takes first param as path to image
 i.e 'assets/image/watermark.png'
-
 -- Second param is margin_right
 -- third param if margin_bottom
-
 $upload->waterMark('watermark.png', '50', '100', true);
 ```
 
@@ -310,12 +270,10 @@ $upload->waterMark('watermark.png', '50', '100', true);
 ```
 By default Compressor is set to -> false
 You need to set to -> true in other to enable the method
-
 Best practice for compressing is to make this the last callback method after the rest
 ->imageAutoResize
 ->waterMark
 ->compress
-
 $upload->compress(true);
 ```
 
@@ -325,12 +283,10 @@ $upload->compress(true);
 By default Folder structure parameter is set to -> 'default'
 -- Do not worry as folder do not need to exists before it can be created.
 -- All uploaded files return all dataset of all uploads
-
 -> 'default' Upload directory name/filename.jpg
 -> 'year' Upload directory name/2022/filename.jpg
 -> 'month' Upload directory name/2022/10/filename.jpg
 -> 'day' Upload directory name/2022/10/28/filename.jpg
-
 ```
 1. Default
    - Year
@@ -339,30 +295,27 @@ By default Folder structure parameter is set to -> 'default'
 ```
 To use, pass in any of the below;
 'default' | 'year' | 'month' | 'day' to the run method when calling
-
 $upload->run('avatar', 'year', 'upload/avatar', 'images', '1.5mb', 1);
-
 ```
 
 
 ### MIME TYPE
 ```
-'video'         =>  ['.mp4', '.mpeg', '.mov', '.avi', '.wmv'],
-'audio'         =>  ['.mp3', '.wav'],
-'files'         =>  ['.docx', '.pdf', '.txt'],
-'images'        =>  ['.jpg', '.jpeg', '.png'],
-'general_file'  =>  ['.docx', '.pdf', '.txt', '.zip', '.rar', '.xlsx', '.xls'],
-'general_image' =>  ['.jpg', '.jpeg', '.png', '.webp'],
-'general_media' =>  ['.mp3', '.wav', '.mp4', '.mpeg', '.mov', '.avi', '.wmv']
-
+'video' => ['video/mp4','video/mpeg','video/quicktime','video/x-msvideo','video/x-ms-wmv']
+'audio' => ['audio/mpeg','audio/x-wav'],
+'files' => ['application/msword','application/pdf','text/plain','application/zip', 'application/x-zip-compressed', 
+'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel',
+'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+'images' => ['image/jpeg', 'image/png'], //'image/webp'
+'general_file' => ['image/jpeg', 'image/png', 'application/pdf'],
+'general_media' => ['audio/mpeg','audio/x-wav', 'video/mp4','video/mpeg','video/quicktime','video/x-msvideo','video/x-ms-wmv'],
 Pass in any of this into the Type parameter section when calling the ->run Method
 ```
 - video
 - audio
 - files
-- general_file
 - images 
-- general_image
+- general_file
 - general_media
 
 
@@ -378,22 +331,18 @@ Array
 		(
 		    [0] => path_to_uploaded_file.jpeg
 		)
-
 	    [new_image] => Array
 		(
 		    [0] => 164471880099d95c853c830f6.jpeg
 		)
-
 	    [folder] => Array
 		(
 		    [0] => upload/164471880099d95c853c830f6.jpeg
 		)
-
 	    [folder_real_path] => Array
 		(
 		    [0] => C:/xampp/htdocs/ultimateUploader-main/upload/164471880099d95c853c830f6.jpeg
 		)
-
 	    [folder_url] => Array
 		(
 		    [0] => http://localhost/ultimateUploader-main/upload/164471880099d95c853c830f6.jpeg
@@ -430,4 +379,3 @@ Watermarked and retain its original quality
 
 - If you love this PHP Library, you can [Buy Tame Developers a coffee](https://www.buymeacoffee.com/tamedevelopers)
 - Link to Youtube Video Tutorial on usage will be available soon
-
