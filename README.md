@@ -37,7 +37,11 @@ Prior to installing `ultimate-uploader` get the [Composer](https://getcomposer.o
 
 ```composer.json
 "require": {
+<<<<<<< HEAD
+    "peterson/ultimate-uploader": "^1.2.0"
+=======
     "peterson/ultimate-uploader": "^1.1"
+>>>>>>> 3f6dc864b91678619dd09f8ce3386abb9f49e746
 }
 ```
 
@@ -430,4 +434,7 @@ Watermarked and retain its original quality
 
 - If you love this PHP Library, you can [Buy Tame Developers a coffee](https://www.buymeacoffee.com/tamedevelopers)
 - Link to Youtube Video Tutorial on usage will be available soon
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3f6dc864b91678619dd09f8ce3386abb9f49e746
