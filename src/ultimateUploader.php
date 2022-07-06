@@ -563,7 +563,7 @@ class ultimateUploader{
             if($ext == 'webp'){
                 $new = imagecreatefromwebp($path_to_file);
             }else{
-                $new = imagecreatefromjpeg($path_to_file);
+                $new = @imagecreatefromjpeg($path_to_file);
             }
         }
         
@@ -621,13 +621,24 @@ class ultimateUploader{
             //check for size error handler type
             if($image_error['same'])
             {
-                //for one size error check
-                if($count === 2){
+                //for both size error check
+                if(isset($image_error['width']) && isset($image_error['height'])){
+                    if($image_error['width'] != $imageSize['width']
+                        || $image_error['height'] != $imageSize['height']){
+                            return [
+                                'response'  => false,
+                                'message'   => sprintf("Image dimensions allowed must be width/%spx by height/%spx", $image_error['width'], $image_error['height'])
+                            ];
+                    }
+                }
+                
+                //for individual size error check
+                else{
                     if(isset($image_error['width']) && isset($imageSize['width'])){
                         if($image_error['width'] != $imageSize['width']){
                             return [
                                 'response'  => false,
-                                'message'   => sprintf("Image dimension allowed is width/%spx", $image_error['width'])
+                                'message'   => sprintf("Image dimension allowed must be width/%spx", $image_error['width'])
                             ];
                         }
                     }
@@ -635,19 +646,9 @@ class ultimateUploader{
                         if($image_error['height'] != $imageSize['height']){
                             return [
                                 'response'  => false,
-                                'message'   => sprintf("Image dimension allowed is height/%spx", $image_error['height'])
+                                'message'   => sprintf("Image dimension allowed must be height/%spx", $image_error['height'])
                             ];
                         }
-                    }
-                }
-                //for both size error check
-                else{
-                    if($image_error['width'] != $imageSize['width']
-                        || $image_error['height'] != $imageSize['height']){
-                            return [
-                                'response'  => false,
-                                'message'   => sprintf("Image dimensions allowed is width/%spx by height/%spx", $image_error['width'], $image_error['height'])
-                            ];
                     }
                 }
             }   
@@ -655,8 +656,19 @@ class ultimateUploader{
             //check if size is greather than or equal to
             else
             {
-                //for one size error check
-                if($count === 2){
+                //for both size error check
+                if(isset($image_error['width']) && isset($image_error['height'])){
+                    if($image_error['width'] > $imageSize['width']
+                        || $image_error['height'] > $imageSize['height']){
+                            return [
+                                'response'  => false,
+                                'message'   => sprintf("Image dimensions allowed must be greater or equal to width/%spx by height/%spx", $image_error['width'], $image_error['height'])
+                            ];
+                    }
+                }
+                
+                //for individual size error check
+                else{
                     if(isset($image_error['width']) && isset($imageSize['width'])){
                         if($image_error['width'] > $imageSize['width']){
                             return [
@@ -673,16 +685,7 @@ class ultimateUploader{
                             ];
                         }
                     }
-                }
-                //for both size error check
-                else{
-                    if($image_error['width'] > $imageSize['width']
-                        || $image_error['height'] > $imageSize['height']){
-                            return [
-                                'response'  => false,
-                                'message'   => sprintf("Image dimensions allowed must be greater or equal to width/%spx by height/%spx", $image_error['width'], $image_error['height'])
-                            ];
-                    }
+                    
                 }
             }
             
@@ -709,7 +712,7 @@ class ultimateUploader{
             if($ext == 'webp'){
                 $new = imagecreatefromwebp($img);
             }else{
-                $new = imagecreatefromjpeg($img);
+                $new = @imagecreatefromjpeg($img);
             }
         }
 
