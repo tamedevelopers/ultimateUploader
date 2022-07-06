@@ -156,7 +156,7 @@ class ultimateUploader{
     * @param filename           string - the html input file name (image).
     * @param folder_create      string - for creating folder (default, year, month, day)
     * @param upload_dir         string - for dir upload folder (image/new | images)
-    * @param type               string - for file mime type (video, audio, files, image, general_file, general_media)
+    * @param type               string - for file mime type (video, audio, files, image, general_image, general_media)
     * @param size               string - for allowed file size (1.5mb)
     * @param limit              int - for allowed upload limit (2)
     * @param dimension_size     array - for image dimension size.
@@ -228,7 +228,7 @@ class ultimateUploader{
                     /**
                     * if upload is an image & image size allowed error. - error 405
                     */
-                    elseif(!$attrError['response'] && in_array($type, ['images', 'general_files']))
+                    elseif(!$attrError['response'] && in_array($type, ['images', 'general_image']))
                     {
                         if(in_array(isset($this->error['405']), array_keys($this->error))){
                             $this->data['status']   = $this->error['405'];
@@ -435,10 +435,13 @@ class ultimateUploader{
 
                     //path to destination image
                     if($file_extension == 'png'){
-                        @$im = imagecreatefrompng($folder_val);
-                    }
-                    else{
-                        @$im = imagecreatefromjpeg($folder_val);
+                        $im = imagecreatefrompng($folder_val);
+                    }else{
+                        if($file_extension == 'webp'){
+                            $im = imagecreatefromwebp($folder_val);
+                        }else{
+                            $im = imagecreatefromjpeg($folder_val);
+                        }
                     }
 
                     // Set the margins for the stamp and get the height/width of the stamp image
@@ -457,9 +460,12 @@ class ultimateUploader{
 
                     if($file_extension == 'png'){
                         imagepng($im, $folder_val, 8, PNG_FILTER_AVG);
-                    }
-                    else{
-                        imagejpeg($im, $folder_val, 90);
+                    }else{
+                        if($file_extension == 'webp'){
+                            imagewebp($im, $folder_val, 100);
+                        }else{
+                            imagejpeg($im, $folder_val, 90);
+                        }
                     }
                     //Free up memory
                     imagedestroy($im);
@@ -497,9 +503,12 @@ class ultimateUploader{
                     //path to destination image
                     if($file_extension == 'png'){
                         $new = imagecreatefrompng("$this->settings/$i_val");
-                    }
-                    else{
-                        $new = imagecreatefromjpeg("$this->settings/$i_val");
+                    }else{
+                        if($file_extension == 'webp'){
+                            $new = imagecreatefromwebp("$this->settings/$i_val");
+                        }else{
+                            $new = imagecreatefromjpeg("$this->settings/$i_val");
+                        }
                     }
 
                     //Get the image size from the image
@@ -523,11 +532,15 @@ class ultimateUploader{
                     //Finish image crop
                     if($file_extension == 'png'){
                         imagepng($im2, "$this->settings/$i_val", 8, PNG_FILTER_AVG);
+                    }else{
+                        if($file_extension == 'webp'){
+                            imagewebp($im2, "$this->settings/$i_val", 100);
+                        }else{
+                            imagejpeg($im2, "$this->settings/$i_val", 90);
+                        }
                     }
-                    else{
-                        imagejpeg($im2, "$this->settings/$i_val", 90);
-                    }
-
+                    //Free up memory
+                    imagedestroy($im2);
                 }
             }
         }
@@ -544,17 +557,21 @@ class ultimateUploader{
         }
         
         $ext = strtolower(pathinfo($path_to_file, PATHINFO_EXTENSION));
-        if($ext == 'png')
-            $new = @imagecreatefrompng($path_to_file);
-        else 
-            $new = @imagecreatefromjpeg($path_to_file);
-        
+        if($ext == 'png'){
+            $new = imagecreatefrompng($path_to_file);
+        }else{
+            if($ext == 'webp'){
+                $new = imagecreatefromwebp($path_to_file);
+            }else{
+                $new = imagecreatefromjpeg($path_to_file);
+            }
+        }
         
         //if image object response
-        if(is_object($new)){
+        if(is_object($new) || is_resource($new)){
             return [
-                'height'    => @imagesy($new), //height -y
-                'width'     => @imagesx($new) //width -x
+                'height'    => imagesy($new), //height -y
+                'width'     => imagesx($new) //width -x
             ];
         }
     }
@@ -591,7 +608,7 @@ class ultimateUploader{
         if($count > 0){
             //check for default same error handler
             if(!isset($image_error['same']))
-                $image_error['same'] = true;
+                $image_error['same'] = false;
 
 
             //get temp image upload attribute
@@ -686,17 +703,21 @@ class ultimateUploader{
         
         $img = $_FILES[$filename]['tmp_name'][0];
         $ext = strtolower(pathinfo($_FILES[$filename]['name'][0], PATHINFO_EXTENSION));
-        if($ext == 'png')
-            $new = @imagecreatefrompng($img);
-        else 
-            $new = @imagecreatefromjpeg($img);
-        
+        if($ext == 'png'){
+            $new = imagecreatefrompng($img);
+        }else{
+            if($ext == 'webp'){
+                $new = imagecreatefromwebp($img);
+            }else{
+                $new = imagecreatefromjpeg($img);
+            }
+        }
 
         //if image object response
-        if(is_object($new)){
+        if(is_object($new) || is_resource($new)){
             return [
-                'height'    => @imagesy($new), //height -y
-                'width'     => @imagesx($new) //width -x
+                'height'    => imagesy($new), //height -y
+                'width'     => imagesx($new) //width -x
             ];
         }
         return;
@@ -879,24 +900,27 @@ class ultimateUploader{
         $this->mimeType = [
             'video'         =>  ['video/mp4','video/mpeg','video/quicktime','video/x-msvideo','video/x-ms-wmv'],
             'audio'         =>  ['audio/mpeg','audio/x-wav'],
-            'files'         =>  ['application/msword','application/pdf','text/plain','application/zip', 'application/x-zip-compressed', 
+            'files'         =>  ['application/msword','application/pdf','text/plain'],
+            'images'        =>  ['image/jpeg', 'image/png'],
+            'general_image' =>  ['image/jpeg', 'image/png', 'image/webp'],
+            'general_file'  =>  [
+                'application/msword','application/pdf','text/plain','application/zip', 'application/x-zip-compressed', 'multipart/x-zip',
+                'application/x-zip-compressed', 'application/x-rar-compressed', 'application/octet-stream', 
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel',
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                ],
-            'images'        =>  ['image/jpeg', 'image/png'], //'image/webp'
-            'general_file'  =>  ['image/jpeg', 'image/png', 'application/pdf'
-                ],
-            'general_media' =>  ['audio/mpeg','audio/x-wav', 'video/mp4','video/mpeg','video/quicktime','video/x-msvideo','video/x-ms-wmv'],
+            ],
+            'general_media' =>  ['audio/mpeg','audio/x-wav', 'video/mp4','video/mpeg','video/quicktime','video/x-msvideo','video/x-ms-wmv']
         ];        
 
         //Extension Type
         $this->extensionType = [
             'video'         =>  ['.mp4', '.mpeg', '.mov', '.avi', '.wmv'],
             'audio'         =>  ['.mp3', '.wav'],
-            'files'         =>  ['.docx', '.pdf', '.txt', '.zip', '.xlsx', '.xls'],
-            'images'        =>  ['.jpg', '.jpeg', '.png'], //'.webp'
-            'general_file'  =>  ['.jpg', '.jpeg', '.png', '.pdf'],
-            'general_media' =>  ['.mp3', '.wav', '.mp4', '.mpeg', '.mov', '.avi', '.wmv'],
+            'files'         =>  ['.docx', '.pdf', '.txt'],
+            'images'        =>  ['.jpg', '.jpeg', '.png'],
+            'general_file'  =>  ['.docx', '.pdf', '.txt', '.zip', '.rar', '.xlsx', '.xls'],
+            'general_image' =>  ['.jpg', '.jpeg', '.png', '.webp'],
+            'general_media' =>  ['.mp3', '.wav', '.mp4', '.mpeg', '.mov', '.avi', '.wmv']
         ];
         
         return ['mime' => $this->mimeType, 'extension' => $this->extensionType];
@@ -979,7 +1003,8 @@ class ImgCompressor {
 			'file_type' => array( // file format allowed
 				'image/jpeg',
 				'image/png',
-				'image/gif'
+				'image/gif',
+                'image/webp'
 			)
 		);
 	}
@@ -995,6 +1020,8 @@ class ImgCompressor {
 			$im = imagecreatefromjpeg($image); // create image from jpeg
 		}else if($type == 'image/gif'){
 			$im = imagecreatefromgif($image); // create image from gif
+		}else if($type == 'image/webp'){
+			$im = imagecreatefromwebp($image); // create image from webp
 		}else{
 			$im = imagecreatefrompng($image);  // create image from png (default)
 		}
@@ -1017,6 +1044,16 @@ class ImgCompressor {
 				imagegif($im, $im_output);
 			}
 			$im_type = 'image/gif';
+		}else if(in_array($c_type, array('webp','WEBP'))){
+			if($this->check_transparent($im)) { // Check if image is transparent
+				imageAlphaBlending($im, true);
+				imageSaveAlpha($im, true);
+				imagewebp($im, $im_output);
+			}
+			else {
+				imagewebp($im, $im_output);
+			}
+			$im_type = 'image/webp';
 		}else if(in_array($c_type, array('png','PNG'))){
 			if($this->check_transparent($im)) { // Check if image is transparent
 				imageAlphaBlending($im, true);
@@ -1085,7 +1122,7 @@ class ImgCompressor {
 		$result = array();
 		
 		// cek & ricek
-		if(in_array($c_type, array('jpeg','jpg','JPG','JPEG','gif','GIF','png','PNG'))) { // jpeg, png, gif only
+		if(in_array($c_type, array('jpeg','jpg','JPG','JPEG','gif','GIF','png','PNG', 'webp', 'WEBP'))) { // jpeg, png, gif only
 			if(in_array($im_type, $this->setting['file_type'])){
 				if($level >= 0 && $level <= 9){
 					$result['status'] = 'success';
@@ -1110,3 +1147,4 @@ class ImgCompressor {
 	}
 	
 }
+
